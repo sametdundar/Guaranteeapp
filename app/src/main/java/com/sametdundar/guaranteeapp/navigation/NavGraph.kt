@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sametdundar.guaranteeapp.ui.screens.ContinueScreen
 import com.sametdundar.guaranteeapp.ui.screens.FavoritesScreen
-import com.sametdundar.guaranteeapp.ui.screens.HomeScreen
-import com.sametdundar.guaranteeapp.ui.screens.MessagesScreen
+import com.sametdundar.guaranteeapp.ui.screens.ShareScreen
 
 @Composable
 fun NavGraph(navController: NavHostController, paddingValues: PaddingValues) {
@@ -20,15 +20,15 @@ fun NavGraph(navController: NavHostController, paddingValues: PaddingValues) {
         modifier = Modifier.padding(paddingValues = paddingValues)
     ) {
         composable(route = ScreenRoutes.Home.route) {
-            HomeScreen()
-        }
-
-        composable(route = ScreenRoutes.Favorites.route) {
             FavoritesScreen()
         }
 
+        composable(route = ScreenRoutes.Favorites.route) {
+            ShareScreen()
+        }
+
         composable(route = ScreenRoutes.Messages.route) {
-            MessagesScreen()
+            ContinueScreen()
         }
 
     }

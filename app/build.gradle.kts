@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,4 +68,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
+    // Room runtime
+    implementation (libs.androidx.room.runtime)
+    // Room KTX (Coroutines desteği)
+    implementation (libs.androidx.room.ktx)
+    implementation (libs.gson)
+    // Hilt
+    implementation (libs.hilt.android)
+    // Hilt ViewModel extension
+    implementation (libs.androidx.hilt.lifecycle.viewmodel)
 }

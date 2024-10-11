@@ -1,6 +1,5 @@
 package com.sametdundar.guaranteeapp.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,14 +16,13 @@ import androidx.compose.ui.unit.sp
 import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
 
 @Composable
-fun HomeScreen() {
+fun ContinueScreen() {
     Surface(
         modifier = Modifier.fillMaxSize()
-            .background(DarkBlue)
     ) {
         Column {
             Text(
-                "HOME PAGE", modifier = Modifier
+                "CONTINUE SCREEN", modifier = Modifier
                     .fillMaxWidth()
                     .align(alignment = Alignment.CenterHorizontally)
                     .padding(top = 20.dp),
