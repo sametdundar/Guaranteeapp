@@ -3,7 +3,6 @@ package com.sametdundar.guaranteeapp.roomdatabase
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "form_data")
 data class FormData(
