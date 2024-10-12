@@ -89,5 +89,14 @@ dependencies {
 
     kapt(libs.androidx.room.compiler.v261)
 
+    implementation (libs.androidx.lifecycle.livedata.ktx)
+
+    // Jetpack Compose
+    implementation (libs.ui) // Güncel sürümü kontrol edin
+    implementation (libs.androidx.material)
+    implementation (libs.ui.tooling.preview)
+
+    // LiveData ile Compose arasında bağ kurmak için
+    implementation (libs.androidx.runtime.livedata)
 
 }

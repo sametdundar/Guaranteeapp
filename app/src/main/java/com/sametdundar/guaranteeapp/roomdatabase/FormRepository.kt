@@ -1,5 +1,6 @@
 package com.sametdundar.guaranteeapp.roomdatabase
 
+import androidx.lifecycle.LiveData
 import javax.inject.Inject
 
 class FormRepository @Inject constructor(private val formDao: FormDao) {
@@ -8,7 +9,6 @@ class FormRepository @Inject constructor(private val formDao: FormDao) {
         formDao.insertFormData(form)
     }
 
-    suspend fun getAllForms(): List<FormData> {
-        return formDao.getAllFormData()
-    }
+    val allUsers: LiveData<List<FormData>> = formDao.getAllFormData()
+
 }
