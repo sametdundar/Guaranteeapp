@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.sametdundar.guaranteeapp.roomdatabase.FormViewModel
 import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
@@ -83,7 +84,9 @@ fun ShareScreen() {
 
             ImagePickerApp3()
 
-            FormScreen()
+            val viewModel: FormViewModel = hiltViewModel()
+
+            FormScreen(viewModel)
 
         }
 
@@ -218,7 +221,7 @@ fun ImageDialog(uri: Uri, onDismiss: () -> Unit) {
 }
 
 @Composable
-fun FormScreen() {
+fun FormScreen(viewModel: FormViewModel) {
     var name by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
@@ -274,13 +277,13 @@ fun FormScreen() {
             onClick = {
                 println("Form submitted with: $name, $email, $phoneNumber, $address")
                 coroutineScope.launch {
-//                    viewModel.saveFormData(
-//                        name.text,
-//                        email.text,
-//                        phoneNumber.text,
-//                        address.text,
-//                        arrayListOf()
-//                    )
+                    viewModel.saveFormData(
+                        name.text,
+                        email.text,
+                        phoneNumber.text,
+                        address.text,
+                        arrayListOf()
+                    )
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -293,5 +296,6 @@ fun FormScreen() {
 @Preview(showBackground = true)
 @Composable
 fun FormScreenPreview() {
-    FormScreen()
+    val viewModel: FormViewModel = hiltViewModel()
+    FormScreen(viewModel)
 }

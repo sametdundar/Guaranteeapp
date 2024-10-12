@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.hilt)
+    kotlin("kapt") // Kapt'yi Kotlin DSL ile ekle
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -47,6 +50,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -74,8 +80,14 @@ dependencies {
     // Room KTX (Coroutines desteği)
     implementation (libs.androidx.room.ktx)
     implementation (libs.gson)
+
     // Hilt
     implementation (libs.hilt.android)
-    // Hilt ViewModel extension
-    implementation (libs.androidx.hilt.lifecycle.viewmodel)
+    implementation(libs.hilt.navigation.compose)
+    implementation (libs.androidx.hilt.navigation.fragment)
+    kapt(libs.hilt.compiler)
+
+    kapt(libs.androidx.room.compiler.v261)
+
+
 }

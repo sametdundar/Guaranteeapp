@@ -31,7 +31,9 @@ import androidx.navigation.compose.rememberNavController
 import com.sametdundar.guaranteeapp.navigation.BottomNavigationBar
 import com.sametdundar.guaranteeapp.navigation.NavGraph
 import com.sametdundar.guaranteeapp.ui.theme.GuaranteeAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -14,11 +14,11 @@ data class FormData(
     val address: String,
     val imageUris: String // JSON formatında URI'leri tutacağız
 ) {
-    // URI listesini dönüştürmek için yardımcı fonksiyonlar
-    fun getImageUris(): List<String> {
-        val listType = object : TypeToken<List<String>>() {}.type
-        return Gson().fromJson(imageUris, listType) ?: emptyList()
-    }
+//    // URI listesini dönüştürmek için yardımcı fonksiyonlar
+//    fun getImageUris(): List<String> {
+//        val listType = object : TypeToken<List<String>>() {}.type
+//        return Gson().fromJson(imageUris, listType) ?: emptyList()
+//    }
 
     companion object {
         fun from(name: String, email: String, phoneNumber: String, address: String, imageUris: List<String>): FormData {
