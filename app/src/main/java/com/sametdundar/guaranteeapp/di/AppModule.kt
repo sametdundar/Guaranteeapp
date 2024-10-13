@@ -1,7 +1,8 @@
-package com.sametdundar.guaranteeapp
+package com.sametdundar.guaranteeapp.di
 
 import android.app.Application
 import androidx.room.Room
+import com.sametdundar.guaranteeapp.MyApplication
 import com.sametdundar.guaranteeapp.roomdatabase.AppDatabase
 import com.sametdundar.guaranteeapp.roomdatabase.FormDao
 import com.sametdundar.guaranteeapp.roomdatabase.FormRepository

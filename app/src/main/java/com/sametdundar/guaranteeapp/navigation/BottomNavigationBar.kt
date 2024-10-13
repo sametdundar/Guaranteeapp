@@ -50,7 +50,7 @@ fun BottomNavigationBar(
                                 contentDescription = item.title
                             )
                         },
-                        label = { Text(text = item.title) },
+                        label = { Text(text = item.title, color = Color.White) },
                         selected = currentRoute == item.route,
                         onClick = {
                             navController.navigate(item.route) {
@@ -64,7 +64,7 @@ fun BottomNavigationBar(
                             }
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = LochMara,
+                            selectedIconColor = DarkBlue,
                             unselectedIconColor = Color.White
                         )
                     )

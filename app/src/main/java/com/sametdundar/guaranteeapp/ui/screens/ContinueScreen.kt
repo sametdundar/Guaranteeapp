@@ -1,8 +1,10 @@
 package com.sametdundar.guaranteeapp.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,16 +20,19 @@ import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
 @Composable
 fun ContinueScreen() {
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column {
+
+            Spacer(modifier = Modifier.height(300.dp))
+
             Text(
-                "CONTINUE SCREEN", modifier = Modifier
+                "ÇOK YAKINDA SİZİNLE OLACAK", modifier = Modifier
                     .fillMaxWidth()
                     .align(alignment = Alignment.CenterHorizontally)
                     .padding(top = 20.dp),
                 textAlign = TextAlign.Center,
-                fontSize = 44.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = DarkBlue
             )

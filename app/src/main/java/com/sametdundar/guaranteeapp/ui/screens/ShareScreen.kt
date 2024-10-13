@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -36,6 +37,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -65,18 +67,17 @@ fun ShareScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
 
             Column {
                 Text(
-                    "SHARE SCREEN", modifier = Modifier
+                    "ÜRÜNÜNÜZÜN GARANTİ BİLGİLERİNİ PAYLAŞIN", modifier = Modifier
                         .fillMaxWidth()
                         .align(alignment = Alignment.CenterHorizontally)
-                        .padding(top = 20.dp),
+                        .padding(top = 32.dp, start = 20.dp, end = 20.dp),
                     textAlign = TextAlign.Center,
-                    fontSize = 44.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = DarkBlue
                 )
@@ -119,10 +120,8 @@ fun ImagePickerApp3() {
 //        verticalArrangement = Arrangement.Center
     ) {
         Button(onClick = { launcher.launch("image/*") }) {
-            Text(text = "Select Images")
+            Text(text = "Ürün Görseli ve Fatura Görseli Ekle")
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         // Seçilen resimleri yatay bir listede göstermek için LazyRow kullanıyoruz
         LazyRow(
@@ -140,6 +139,7 @@ fun ImagePickerApp3() {
                         modifier = Modifier
                             .size(100.dp) // Resimleri 100x100 dp boyutuna küçült
                             .padding(8.dp)
+                            .clip(RoundedCornerShape(16.dp)) // Köşeleri yuvarlak yap
                             .clickable { selectedImageUri = uri }, // Tıklanınca resmi büyüt
                         contentScale = ContentScale.Crop
                     )
@@ -226,7 +226,7 @@ fun FormScreen(viewModel: FormViewModel) {
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
     var address by remember { mutableStateOf(TextFieldValue("")) }
-
+    var ekbilgi by remember { mutableStateOf(TextFieldValue("")) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -270,7 +270,23 @@ fun FormScreen(viewModel: FormViewModel) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        // Address input field
+        TextField(
+            value = ekbilgi,
+            onValueChange = { ekbilgi = it },
+            label = { Text("Ek Bilgi") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Address input field
+        TextField(
+            value = ekbilgi,
+            onValueChange = { ekbilgi = it },
+            label = { Text("Ek Bilgi") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+//        Spacer(modifier = Modifier.height(12.dp))
 
         // Submit button
         Button(
@@ -284,6 +300,13 @@ fun FormScreen(viewModel: FormViewModel) {
                         address.text,
                         arrayListOf()
                     )
+
+                    // Form alanlarını sıfırla
+                    name = TextFieldValue("")
+                    email = TextFieldValue("")
+                    phoneNumber = TextFieldValue("")
+                    address = TextFieldValue("")
+                    ekbilgi = TextFieldValue("")
                 }
             },
             modifier = Modifier.fillMaxWidth()
