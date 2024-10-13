@@ -17,3 +17,6 @@ val Teal200 = Color(0xFF03DAC5)
 
 val DarkBlue = Color(0xFF032541)
 val LochMara = Color(0xFF0072B9)
+
+val GreenColor = Color(0x3300ff00)
+val RedColor = Color(0x33FF0000)

@@ -1,5 +1,6 @@
 package com.sametdundar.guaranteeapp.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,11 +29,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.sametdundar.guaranteeapp.roomdatabase.FormData
+import com.sametdundar.guaranteeapp.ui.theme.GreenColor
+import com.sametdundar.guaranteeapp.ui.theme.RedColor
+import com.sametdundar.guaranteeapp.utils.Constants.DETAILS
 
 @Composable
-fun ListScreen(viewModel: FormViewModel = hiltViewModel(),navController: NavHostController) {
+fun ListScreen(viewModel: FormViewModel = hiltViewModel(), navController: NavHostController) {
 
-    val userList by viewModel.allUsers.observeAsState(initial = emptyList())
+    val allFormData by viewModel.allFormData.observeAsState(initial = emptyList())
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -60,8 +67,8 @@ fun ListScreen(viewModel: FormViewModel = hiltViewModel(),navController: NavHost
                 }
 
                 // Kullanıcı Listesi
-                items(userList) { user ->
-                    UserItem(user = User(user.name,10),navController)
+                items(allFormData) { formData ->
+                    ListItem(formData = formData, navController,viewModel)
                 }
             }
         }
@@ -69,13 +76,15 @@ fun ListScreen(viewModel: FormViewModel = hiltViewModel(),navController: NavHost
 }
 
 @Composable
-fun UserItem(user: User,navController: NavHostController) {
+fun ListItem(formData: FormData, navController: NavHostController, viewModel: FormViewModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
+        colors = CardDefaults.cardColors(containerColor = if(formData.isChecked) GreenColor else RedColor),
         onClick = {
-            navController.navigate("userDetails/${user.name}/${user.age}")
+            viewModel.sendFormDataDetail(formData)
+            navController.navigate(DETAILS)
         }
     ) {
         Row(
@@ -85,12 +94,19 @@ fun UserItem(user: User,navController: NavHostController) {
         ) {
             Column {
                 Text(
-                    text = user.name,
+                    text = formData.name,
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 )
                 Text(
-                    text = "Age: ${user.age}",
+                    text = "Kaç Yıl Garantisi ${if(formData.isChecked) "Var" else "Vardı"}: ${formData.noteTime}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray
+                )
+
+                Text(
+                    text = "Garanti Devam Ediyor mu: ${if (formData.isChecked) "Devam Ediyor" else "Bitti"}",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
@@ -98,7 +114,3 @@ fun UserItem(user: User,navController: NavHostController) {
         }
     }
 }
-data class User(
-    val name: String,
-    val age: Int
-)

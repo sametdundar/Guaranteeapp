@@ -24,7 +24,7 @@ fun ContinueScreen() {
     ) {
         Column {
 
-            Spacer(modifier = Modifier.height(300.dp))
+            Spacer(modifier = Modifier.height(280.dp))
 
             Text(
                 "GARANTİNİ DEVAM ETTİR\nÇOK YAKINDA SİZİNLE OLACAK", modifier = Modifier

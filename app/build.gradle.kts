@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt)
     kotlin("kapt") // Kapt'yi Kotlin DSL ile ekle
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 android {

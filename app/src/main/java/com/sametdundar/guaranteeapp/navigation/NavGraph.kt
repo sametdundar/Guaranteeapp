@@ -8,13 +8,19 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sametdundar.guaranteeapp.roomdatabase.FormData
 import com.sametdundar.guaranteeapp.ui.screens.ContinueScreen
 import com.sametdundar.guaranteeapp.ui.screens.ListScreen
 import com.sametdundar.guaranteeapp.ui.screens.ShareScreen
 import com.sametdundar.guaranteeapp.ui.screens.UserDetailsScreen
+import com.sametdundar.guaranteeapp.utils.Constants.DETAILS
 
 @Composable
-fun NavGraph(navController: NavHostController, paddingValues: PaddingValues, bottomBarState: MutableState<Boolean>) {
+fun NavGraph(
+    navController: NavHostController,
+    paddingValues: PaddingValues,
+    bottomBarState: MutableState<Boolean>
+) {
 
     NavHost(
         navController = navController,
@@ -36,11 +42,9 @@ fun NavGraph(navController: NavHostController, paddingValues: PaddingValues, bot
             ContinueScreen()
         }
 
-        composable("userDetails/{userName}/{userAge}") { backStackEntry ->
-            val userName = backStackEntry.arguments?.getString("userName") ?: ""
-            val userAge = backStackEntry.arguments?.getString("userAge")?.toInt() ?: 0
+        composable(DETAILS) {
             bottomBarState.value = false
-            UserDetailsScreen(userName = userName, userAge = userAge)
+            UserDetailsScreen(navController = navController)
         }
 
     }

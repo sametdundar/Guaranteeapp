@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -24,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -224,11 +227,15 @@ fun ImageDialog(uri: Uri, onDismiss: () -> Unit) {
 
 @Composable
 fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
-    var name by remember { mutableStateOf(TextFieldValue("")) }
+    var baslik by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
     var address by remember { mutableStateOf(TextFieldValue("")) }
-    var ekbilgi by remember { mutableStateOf(TextFieldValue("")) }
+    var noteStart by remember { mutableStateOf(TextFieldValue("")) }
+    var noteEnd by remember { mutableStateOf(TextFieldValue("")) }
+    var noteTime by remember { mutableStateOf(TextFieldValue("")) }
+    var additinalInformation by remember { mutableStateOf(TextFieldValue("")) }
+    var isChecked by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -240,9 +247,9 @@ fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
     ) {
         // Name input field
         TextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Name") },
+            value = baslik,
+            onValueChange = { baslik = it },
+            label = { Text("Başlık") },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -250,7 +257,7 @@ fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
         TextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text("Mail Adresi") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email)
         )
@@ -259,7 +266,7 @@ fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
         TextField(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
-            label = { Text("Phone Number") },
+            label = { Text("Telefon Numarası") },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Phone)
         )
@@ -268,47 +275,82 @@ fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
         TextField(
             value = address,
             onValueChange = { address = it },
-            label = { Text("Address") },
+            label = { Text("Ürünün Bulunduğu Adres") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // noteStart field
+        TextField(
+            value = noteStart,
+            onValueChange = { noteStart = it },
+            label = { Text("Garanti Başlangıcı") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // noteEnd field
+        TextField(
+            value = noteEnd,
+            onValueChange = { noteEnd = it },
+            label = { Text("Garanti Bitişi") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // noteTime field
+        TextField(
+            value = noteTime,
+            onValueChange = { noteTime = it },
+            label = { Text("Garanti Süresi") },
             modifier = Modifier.fillMaxWidth()
         )
 
         // Address input field
         TextField(
-            value = ekbilgi,
-            onValueChange = { ekbilgi = it },
-            label = { Text("Ek Bilgi") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Address input field
-        TextField(
-            value = ekbilgi,
-            onValueChange = { ekbilgi = it },
+            value = additinalInformation,
+            onValueChange = { additinalInformation = it },
             label = { Text("Ek Bilgi") },
             modifier = Modifier.fillMaxWidth()
         )
 
 //        Spacer(modifier = Modifier.height(12.dp))
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(), // Satırı genişlet
+            verticalAlignment = Alignment.CenterVertically // Yükseklik merkezleme
+        ) {
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = { isChecked = it } // Durumu güncelle
+            )
+            Spacer(modifier = Modifier.width(4.dp)) // Checkbox ile metin arasında boşluk
+            Text("Garanti Devam Ediyor mu ?") // Duruma göre metin
+        }
+
+
         // Submit button
         Button(
             onClick = {
-                println("Form submitted with: $name, $email, $phoneNumber, $address")
+                println("Form submitted with: $baslik, $email, $phoneNumber, $address")
                 coroutineScope.launch {
                     viewModel.saveFormData(
-                        name.text,
+                        baslik.text,
                         email.text,
                         phoneNumber.text,
                         address.text,
+                        noteStart.text,
+                        noteEnd.text,
+                        noteTime.text,
+                        additinalInformation.text,
+                        isChecked,
                         arrayListOf()
                     )
 
                     // Form alanlarını sıfırla
-                    name = TextFieldValue("")
+                    baslik = TextFieldValue("")
                     email = TextFieldValue("")
                     phoneNumber = TextFieldValue("")
                     address = TextFieldValue("")
-                    ekbilgi = TextFieldValue("")
+                    additinalInformation = TextFieldValue("")
 
                     navController.navigate(LIST_SCREEN)
 
