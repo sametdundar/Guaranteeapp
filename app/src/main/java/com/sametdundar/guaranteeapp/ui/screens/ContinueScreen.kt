@@ -27,7 +27,7 @@ fun ContinueScreen() {
             Spacer(modifier = Modifier.height(300.dp))
 
             Text(
-                "ÇOK YAKINDA SİZİNLE OLACAK", modifier = Modifier
+                "GARANTİNİ DEVAM ETTİR\nÇOK YAKINDA SİZİNLE OLACAK", modifier = Modifier
                     .fillMaxWidth()
                     .align(alignment = Alignment.CenterHorizontally)
                     .padding(top = 20.dp),

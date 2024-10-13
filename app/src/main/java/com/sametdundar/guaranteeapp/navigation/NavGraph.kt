@@ -28,7 +28,7 @@ fun NavGraph(navController: NavHostController, paddingValues: PaddingValues, bot
 
         composable(route = ScreenRoutes.Favorites.route) {
             bottomBarState.value = true
-            ShareScreen()
+            ShareScreen(navController = navController)
         }
 
         composable(route = ScreenRoutes.Messages.route) {

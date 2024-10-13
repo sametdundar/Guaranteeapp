@@ -51,13 +51,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.sametdundar.guaranteeapp.roomdatabase.FormViewModel
 import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
+import com.sametdundar.guaranteeapp.utils.Constants.LIST_SCREEN
 import kotlinx.coroutines.launch
 
 @Composable
-fun ShareScreen() {
+fun ShareScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize()
             .background(DarkBlue)
@@ -83,11 +85,11 @@ fun ShareScreen() {
                 )
             }
 
-            ImagePickerApp3()
+            ImagePickerApp()
 
             val viewModel: FormViewModel = hiltViewModel()
 
-            FormScreen(viewModel)
+            FormScreen(viewModel,navController)
 
         }
 
@@ -96,7 +98,7 @@ fun ShareScreen() {
 }
 
 @Composable
-fun ImagePickerApp3() {
+fun ImagePickerApp() {
     // Seçilen resimlerin URI'lerini tutan state
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
@@ -221,7 +223,7 @@ fun ImageDialog(uri: Uri, onDismiss: () -> Unit) {
 }
 
 @Composable
-fun FormScreen(viewModel: FormViewModel) {
+fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
     var name by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
@@ -307,6 +309,9 @@ fun FormScreen(viewModel: FormViewModel) {
                     phoneNumber = TextFieldValue("")
                     address = TextFieldValue("")
                     ekbilgi = TextFieldValue("")
+
+                    navController.navigate(LIST_SCREEN)
+
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -314,11 +319,4 @@ fun FormScreen(viewModel: FormViewModel) {
             Text("Submit")
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FormScreenPreview() {
-    val viewModel: FormViewModel = hiltViewModel()
-    FormScreen(viewModel)
 }

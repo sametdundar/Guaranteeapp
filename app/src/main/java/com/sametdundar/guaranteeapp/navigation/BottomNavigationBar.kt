@@ -65,7 +65,8 @@ fun BottomNavigationBar(
                         },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = DarkBlue,
-                            unselectedIconColor = Color.White
+                            unselectedIconColor = Color.White,
+                            indicatorColor = Color.White
                         )
                     )
                 }
