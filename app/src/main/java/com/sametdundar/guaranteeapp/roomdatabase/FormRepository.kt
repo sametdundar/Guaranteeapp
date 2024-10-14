@@ -9,6 +9,10 @@ class FormRepository @Inject constructor(private val formDao: FormDao) {
         formDao.insertFormData(form)
     }
 
+    suspend fun updateFormData(formData: FormData) {
+        formDao.updateFormData(formData)
+    }
+
     val allUsers: LiveData<List<FormData>> = formDao.getAllFormData()
 
 }

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface FormDao {
@@ -13,4 +14,7 @@ interface FormDao {
 
     @Query("SELECT * FROM form_data")
     fun getAllFormData(): LiveData<List<FormData>>
+
+    @Update
+    suspend fun updateFormData(formData: FormData)
 }

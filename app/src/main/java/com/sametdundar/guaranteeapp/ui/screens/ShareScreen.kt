@@ -358,7 +358,7 @@ fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Submit")
+            Text("Paylaş")
         }
     }
 }

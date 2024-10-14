@@ -49,4 +49,10 @@ class FormViewModel @Inject constructor(
     fun sendFormDataDetail(formData: FormData){
         formDataDetail.value = formData
     }
+
+    fun updateFormData(formData: FormData) {
+        viewModelScope.launch {
+            repository.updateFormData(formData)
+        }
+    }
 }

@@ -57,9 +57,10 @@ import com.sametdundar.guaranteeapp.utils.Constants.LIST_SCREEN
 import kotlinx.coroutines.launch
 
 @Composable
-fun UserDetailsScreen(formData: FormData,navController: NavHostController) {
+fun UserDetailsScreen(formData: FormData, navController: NavHostController) {
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(DarkBlue)
     ) {
 
@@ -87,7 +88,7 @@ fun UserDetailsScreen(formData: FormData,navController: NavHostController) {
 
             val viewModel: FormViewModel = hiltViewModel()
 
-            FormScreenDetail(formData,viewModel,navController)
+            FormScreenDetail(formData, viewModel, navController)
 
         }
 
@@ -168,8 +169,13 @@ fun ImagePickerAppDetail() {
         }
     }
 }
+
 @Composable
-fun FormScreenDetail(formData: FormData,viewModel: FormViewModel,navController: NavHostController) {
+fun FormScreenDetail(
+    formData: FormData,
+    viewModel: FormViewModel,
+    navController: NavHostController
+) {
     var baslik by remember { mutableStateOf(TextFieldValue(formData.name)) }
     var email by remember { mutableStateOf(TextFieldValue(formData.email)) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue(formData.phoneNumber)) }
@@ -275,17 +281,20 @@ fun FormScreenDetail(formData: FormData,viewModel: FormViewModel,navController: 
             onClick = {
                 println("Form submitted with: $baslik, $email, $phoneNumber, $address")
                 coroutineScope.launch {
-                    viewModel.saveFormData(
-                        baslik.text,
-                        email.text,
-                        phoneNumber.text,
-                        address.text,
-                        noteStart.text,
-                        noteEnd.text,
-                        noteTime.text,
-                        additinalInformation.text,
-                        isChecked,
-                        arrayListOf()
+                    viewModel.updateFormData(
+                        FormData(
+                            formData.id,
+                            baslik.text,
+                            email.text,
+                            phoneNumber.text,
+                            address.text,
+                            noteStart.text,
+                            noteEnd.text,
+                            noteTime.text,
+                            additinalInformation.text,
+                            isChecked,
+                            ""
+                        )
                     )
 
                     // Form alanlarını sıfırla
@@ -301,7 +310,7 @@ fun FormScreenDetail(formData: FormData,viewModel: FormViewModel,navController: 
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Submit")
+            Text("Güncelle")
         }
     }
 }
