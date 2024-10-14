@@ -50,13 +50,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.sametdundar.guaranteeapp.roomdatabase.FormData
 import com.sametdundar.guaranteeapp.roomdatabase.FormViewModel
 import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
 import com.sametdundar.guaranteeapp.utils.Constants.LIST_SCREEN
 import kotlinx.coroutines.launch
 
 @Composable
-fun UserDetailsScreen(navController: NavHostController) {
+fun UserDetailsScreen(formData: FormData,navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize()
             .background(DarkBlue)
@@ -86,7 +87,7 @@ fun UserDetailsScreen(navController: NavHostController) {
 
             val viewModel: FormViewModel = hiltViewModel()
 
-            FormScreenDetail(viewModel,navController)
+            FormScreenDetail(formData,viewModel,navController)
 
         }
 
@@ -168,20 +169,18 @@ fun ImagePickerAppDetail() {
     }
 }
 @Composable
-fun FormScreenDetail(viewModel: FormViewModel,navController: NavHostController) {
-    var baslik by remember { mutableStateOf(TextFieldValue("")) }
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
-    var address by remember { mutableStateOf(TextFieldValue("")) }
-    var noteStart by remember { mutableStateOf(TextFieldValue("")) }
-    var noteEnd by remember { mutableStateOf(TextFieldValue("")) }
-    var noteTime by remember { mutableStateOf(TextFieldValue("")) }
-    var additinalInformation by remember { mutableStateOf(TextFieldValue("")) }
-    var isChecked by remember { mutableStateOf(false) }
+fun FormScreenDetail(formData: FormData,viewModel: FormViewModel,navController: NavHostController) {
+    var baslik by remember { mutableStateOf(TextFieldValue(formData.name)) }
+    var email by remember { mutableStateOf(TextFieldValue(formData.email)) }
+    var phoneNumber by remember { mutableStateOf(TextFieldValue(formData.phoneNumber)) }
+    var address by remember { mutableStateOf(TextFieldValue(formData.address)) }
+    var noteStart by remember { mutableStateOf(TextFieldValue(formData.noteStart)) }
+    var noteEnd by remember { mutableStateOf(TextFieldValue(formData.noteEnd)) }
+    var noteTime by remember { mutableStateOf(TextFieldValue(formData.noteTime)) }
+    var additinalInformation by remember { mutableStateOf(TextFieldValue(formData.additionalInformation)) }
+    var isChecked by remember { mutableStateOf(formData.isChecked) }
 
     val coroutineScope = rememberCoroutineScope()
-
-    val dataDetail by viewModel.formDataDetail.observeAsState()
 
     Column(
         modifier = Modifier

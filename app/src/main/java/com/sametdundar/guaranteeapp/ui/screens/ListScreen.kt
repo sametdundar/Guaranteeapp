@@ -1,5 +1,6 @@
 package com.sametdundar.guaranteeapp.ui.screens
 
+import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,10 +30,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.sametdundar.guaranteeapp.navigation.ScreenRoutes
 import com.sametdundar.guaranteeapp.roomdatabase.FormData
 import com.sametdundar.guaranteeapp.ui.theme.GreenColor
 import com.sametdundar.guaranteeapp.ui.theme.RedColor
-import com.sametdundar.guaranteeapp.utils.Constants.DETAILS
+import com.sametdundar.guaranteeapp.utils.Constants.FORM_DETAIL
+import com.sametdundar.guaranteeapp.utils.JsonConverter.toJson
 
 @Composable
 fun ListScreen(viewModel: FormViewModel = hiltViewModel(), navController: NavHostController) {
@@ -83,8 +86,9 @@ fun ListItem(formData: FormData, navController: NavHostController, viewModel: Fo
             .padding(8.dp),
         colors = CardDefaults.cardColors(containerColor = if(formData.isChecked) GreenColor else RedColor),
         onClick = {
-            viewModel.sendFormDataDetail(formData)
-            navController.navigate(DETAILS)
+
+            navController.navigate("${ScreenRoutes.FormDetail.route}?formData=${toJson(formData)}")
+
         }
     ) {
         Row(
