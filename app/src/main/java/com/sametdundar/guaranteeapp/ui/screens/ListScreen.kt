@@ -70,7 +70,7 @@ fun ListScreen(viewModel: FormViewModel = hiltViewModel(), navController: NavHos
                 }
 
                 // Kullanıcı Listesi
-                items(allFormData) { formData ->
+                items(allFormData.reversed()) { formData ->
                     ListItem(formData = formData, navController,viewModel)
                 }
             }

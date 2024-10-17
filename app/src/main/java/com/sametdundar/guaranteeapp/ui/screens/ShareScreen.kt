@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -45,26 +44,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.sametdundar.guaranteeapp.roomdatabase.Converters
 import com.sametdundar.guaranteeapp.roomdatabase.FormViewModel
 import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
 import com.sametdundar.guaranteeapp.utils.Constants.LIST_SCREEN
+import com.sametdundar.guaranteeapp.utils.JsonConverter.copyUriToInternalStorage
+import com.sametdundar.guaranteeapp.utils.JsonConverter.fromJsonList
 import kotlinx.coroutines.launch
 
 @Composable
 fun ShareScreen(navController: NavHostController) {
+
+    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) } // imageUris burada tanımlandı
+
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(DarkBlue)
     ) {
 
@@ -88,11 +94,16 @@ fun ShareScreen(navController: NavHostController) {
                 )
             }
 
-            ImagePickerApp()
+
+            // ImagePickerApp'e imageUris'i ve güncelleme fonksiyonunu geçiyoruz
+            ImagePickerApp(imageUris, onImagesSelected = { uris ->
+                imageUris = uris
+            })
 
             val viewModel: FormViewModel = hiltViewModel()
 
-            FormScreen(viewModel,navController)
+            // FormScreen'e de imageUris'i geçiyoruz
+            FormScreen(viewModel, navController, imageUris)
 
         }
 
@@ -101,11 +112,13 @@ fun ShareScreen(navController: NavHostController) {
 }
 
 @Composable
-fun ImagePickerApp() {
-    // Seçilen resimlerin URI'lerini tutan state
-    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+fun ImagePickerApp(
+    imageUris: List<Uri>, // imageUris parametre olarak alındı
+    onImagesSelected: (List<Uri>) -> Unit // Seçilen resimleri geri döndüren bir callback
+) {
 
-    // Büyük hali gösterilecek resmin URI'sini tutan state
+    val context = LocalContext.current
+
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     // Resim seçici başlatıcı (multiple resim seçimi için)
@@ -113,7 +126,11 @@ fun ImagePickerApp() {
         contract = ActivityResultContracts.GetMultipleContents()
     ) { uris: List<Uri>? ->
         uris?.let {
-            imageUris = it // Seçilen URI'leri günceller
+            it.forEach { uri ->
+                copyUriToInternalStorage(context, uri)
+            }
+
+            onImagesSelected(it) // Seçilen URI'leri günceller
         }
     }
 
@@ -134,6 +151,7 @@ fun ImagePickerApp() {
             horizontalArrangement = Arrangement.spacedBy(8.dp) // Resimler arasına boşluk ekle
         ) {
             items(imageUris) { uri ->
+
                 Box(
                     contentAlignment = Alignment.TopEnd,
                     modifier = Modifier.size(100.dp)
@@ -151,7 +169,7 @@ fun ImagePickerApp() {
                     // Sil butonu
                     IconButton(
                         onClick = {
-                            imageUris = imageUris.toMutableList().apply { remove(uri) }
+                            onImagesSelected(imageUris.toMutableList().apply { remove(uri) })
                         }
                     ) {
                         Icon(
@@ -226,7 +244,7 @@ fun ImageDialog(uri: Uri, onDismiss: () -> Unit) {
 }
 
 @Composable
-fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
+fun FormScreen(viewModel: FormViewModel, navController: NavHostController, imageUris: List<Uri>) {
     var baslik by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
@@ -342,7 +360,7 @@ fun FormScreen(viewModel: FormViewModel,navController: NavHostController) {
                         noteTime.text,
                         additinalInformation.text,
                         isChecked,
-                        arrayListOf()
+                        imageUris.map { it.toString() }
                     )
 
                     // Form alanlarını sıfırla

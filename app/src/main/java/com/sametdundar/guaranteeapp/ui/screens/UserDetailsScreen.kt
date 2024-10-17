@@ -35,7 +35,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,14 +49,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.google.gson.Gson
 import com.sametdundar.guaranteeapp.roomdatabase.FormData
 import com.sametdundar.guaranteeapp.roomdatabase.FormViewModel
 import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
 import com.sametdundar.guaranteeapp.utils.Constants.LIST_SCREEN
+import com.sametdundar.guaranteeapp.utils.JsonConverter.fromJson
 import kotlinx.coroutines.launch
 
 @Composable
 fun UserDetailsScreen(formData: FormData, navController: NavHostController) {
+
+    val imageUri = fromJson<List<String>>(formData.imageUris ?: "")
+
+    var imageUris: List<Uri> = imageUri.map { Uri.parse(it) }
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -84,11 +90,13 @@ fun UserDetailsScreen(formData: FormData, navController: NavHostController) {
                 )
             }
 
-            ImagePickerAppDetail()
+            ImagePickerAppDetail(formData, imageUris, onImagesSelected = { uris ->
+                imageUris = uris
+            })
 
             val viewModel: FormViewModel = hiltViewModel()
 
-            FormScreenDetail(formData, viewModel, navController)
+            FormScreenDetail(formData, viewModel, navController, imageUris)
 
         }
 
@@ -97,9 +105,14 @@ fun UserDetailsScreen(formData: FormData, navController: NavHostController) {
 }
 
 @Composable
-fun ImagePickerAppDetail() {
+fun ImagePickerAppDetail(
+    formData: FormData,
+    imageUris: List<Uri>, // imageUris parametre olarak alındı
+    onImagesSelected: (List<Uri>) -> Unit // Seçilen resimleri geri döndüren bir callback
+) {
     // Seçilen resimlerin URI'lerini tutan state
-    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+//    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+
 
     // Büyük hali gösterilecek resmin URI'sini tutan state
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -109,7 +122,7 @@ fun ImagePickerAppDetail() {
         contract = ActivityResultContracts.GetMultipleContents()
     ) { uris: List<Uri>? ->
         uris?.let {
-            imageUris = it // Seçilen URI'leri günceller
+            onImagesSelected(it)
         }
     }
 
@@ -147,7 +160,7 @@ fun ImagePickerAppDetail() {
                     // Sil butonu
                     IconButton(
                         onClick = {
-                            imageUris = imageUris.toMutableList().apply { remove(uri) }
+                            onImagesSelected(imageUris.toMutableList().apply { remove(uri) })
                         }
                     ) {
                         Icon(
@@ -174,7 +187,8 @@ fun ImagePickerAppDetail() {
 fun FormScreenDetail(
     formData: FormData,
     viewModel: FormViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    imageUris: List<Uri>
 ) {
     var baslik by remember { mutableStateOf(TextFieldValue(formData.name)) }
     var email by remember { mutableStateOf(TextFieldValue(formData.email)) }
@@ -293,7 +307,7 @@ fun FormScreenDetail(
                             noteTime.text,
                             additinalInformation.text,
                             isChecked,
-                            ""
+                            Gson().toJson(imageUris.map { it.toString() }) // URI'leri JSON string'e çeviriyoruz
                         )
                     )
 
