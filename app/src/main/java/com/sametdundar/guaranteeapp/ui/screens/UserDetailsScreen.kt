@@ -1,5 +1,6 @@
 package com.sametdundar.guaranteeapp.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -42,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -49,6 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.google.gson.Gson
 import com.sametdundar.guaranteeapp.roomdatabase.FormData
 import com.sametdundar.guaranteeapp.roomdatabase.FormViewModel
@@ -113,6 +116,7 @@ fun ImagePickerAppDetail(
     // Seçilen resimlerin URI'lerini tutan state
 //    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
+    val context = LocalContext.current
 
     // Büyük hali gösterilecek resmin URI'sini tutan state
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -122,6 +126,13 @@ fun ImagePickerAppDetail(
         contract = ActivityResultContracts.GetMultipleContents()
     ) { uris: List<Uri>? ->
         uris?.let {
+            it.forEach { uri ->
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+
             onImagesSelected(it)
         }
     }
@@ -148,7 +159,12 @@ fun ImagePickerAppDetail(
                     modifier = Modifier.size(100.dp)
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(uri),
+                        painter = rememberAsyncImagePainter(
+                            ImageRequest
+                                .Builder(LocalContext.current)
+                                .data(data = uri)
+                                .build()
+                        ),
                         contentDescription = "Selected Image",
                         modifier = Modifier
                             .size(100.dp) // Resimleri 100x100 dp boyutuna küçült

@@ -1,5 +1,6 @@
 package com.sametdundar.guaranteeapp.ui.screens
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -68,6 +69,7 @@ fun ShareScreen(navController: NavHostController) {
 
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) } // imageUris burada tanımlandı
 
+    var imageUri : ArrayList<String> = arrayListOf()
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -98,12 +100,17 @@ fun ShareScreen(navController: NavHostController) {
             // ImagePickerApp'e imageUris'i ve güncelleme fonksiyonunu geçiyoruz
             ImagePickerApp(imageUris, onImagesSelected = { uris ->
                 imageUris = uris
+
+                uris.forEach { uri ->
+                    imageUri.add(uri.toString())
+
+                }
             })
 
             val viewModel: FormViewModel = hiltViewModel()
 
             // FormScreen'e de imageUris'i geçiyoruz
-            FormScreen(viewModel, navController, imageUris)
+            FormScreen(viewModel, navController, imageUris, imageUri)
 
         }
 
@@ -127,7 +134,10 @@ fun ImagePickerApp(
     ) { uris: List<Uri>? ->
         uris?.let {
             it.forEach { uri ->
-                copyUriToInternalStorage(context, uri)
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
             }
 
             onImagesSelected(it) // Seçilen URI'leri günceller
@@ -244,7 +254,7 @@ fun ImageDialog(uri: Uri, onDismiss: () -> Unit) {
 }
 
 @Composable
-fun FormScreen(viewModel: FormViewModel, navController: NavHostController, imageUris: List<Uri>) {
+fun FormScreen(viewModel: FormViewModel, navController: NavHostController, imageUris: List<Uri>, imageUri: ArrayList<String>) {
     var baslik by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
@@ -360,7 +370,7 @@ fun FormScreen(viewModel: FormViewModel, navController: NavHostController, image
                         noteTime.text,
                         additinalInformation.text,
                         isChecked,
-                        imageUris.map { it.toString() }
+                        imageUri
                     )
 
                     // Form alanlarını sıfırla
