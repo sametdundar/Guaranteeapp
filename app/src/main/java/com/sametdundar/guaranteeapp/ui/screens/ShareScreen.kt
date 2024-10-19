@@ -56,12 +56,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.sametdundar.guaranteeapp.roomdatabase.Converters
 import com.sametdundar.guaranteeapp.roomdatabase.FormViewModel
 import com.sametdundar.guaranteeapp.ui.theme.DarkBlue
 import com.sametdundar.guaranteeapp.utils.Constants.LIST_SCREEN
-import com.sametdundar.guaranteeapp.utils.JsonConverter.copyUriToInternalStorage
-import com.sametdundar.guaranteeapp.utils.JsonConverter.fromJsonList
 import kotlinx.coroutines.launch
 
 @Composable
