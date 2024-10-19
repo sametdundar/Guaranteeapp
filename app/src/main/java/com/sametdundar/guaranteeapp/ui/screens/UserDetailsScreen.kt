@@ -63,9 +63,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun UserDetailsScreen(formData: FormData, navController: NavHostController) {
 
-    val imageUri = fromJson<List<String>>(formData.imageUris ?: "")
+    val imageUri = fromJson<ArrayList<String>>(formData.imageUris ?: "")
 
-    var imageUris: List<Uri> = imageUri.map { Uri.parse(it) }
+    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
+
+    imageUris = imageUri.map { Uri.parse(it) } as ArrayList
 
     Surface(
         modifier = Modifier
@@ -110,18 +112,14 @@ fun UserDetailsScreen(formData: FormData, navController: NavHostController) {
 @Composable
 fun ImagePickerAppDetail(
     formData: FormData,
-    imageUris: List<Uri>, // imageUris parametre olarak alındı
-    onImagesSelected: (List<Uri>) -> Unit // Seçilen resimleri geri döndüren bir callback
+    imageUris: List<Uri>,
+    onImagesSelected: (List<Uri>) -> Unit
 ) {
-    // Seçilen resimlerin URI'lerini tutan state
-//    var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
     val context = LocalContext.current
 
-    // Büyük hali gösterilecek resmin URI'sini tutan state
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Resim seçici başlatıcı (multiple resim seçimi için)
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents()
     ) { uris: List<Uri>? ->
@@ -139,16 +137,13 @@ fun ImagePickerAppDetail(
 
     Column(
         modifier = Modifier
-//            .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
-//        verticalArrangement = Arrangement.Center
     ) {
         Button(onClick = { launcher.launch("image/*") }) {
             Text(text = "Ürün Görseli ve Fatura Görseli Ekle")
         }
 
-        // Seçilen resimleri yatay bir listede göstermek için LazyRow kullanıyoruz
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp) // Resimler arasına boşluk ekle

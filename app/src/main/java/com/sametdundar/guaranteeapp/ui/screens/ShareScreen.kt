@@ -66,14 +66,12 @@ fun ShareScreen(navController: NavHostController) {
 
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) } // imageUris burada tanımlandı
 
-    var imageUri : ArrayList<String> = arrayListOf()
     Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(DarkBlue)
     ) {
 
-        // Ana Column
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,20 +92,14 @@ fun ShareScreen(navController: NavHostController) {
             }
 
 
-            // ImagePickerApp'e imageUris'i ve güncelleme fonksiyonunu geçiyoruz
             ImagePickerApp(imageUris, onImagesSelected = { uris ->
                 imageUris = uris
-
-                uris.forEach { uri ->
-                    imageUri.add(uri.toString())
-
-                }
             })
 
             val viewModel: FormViewModel = hiltViewModel()
 
             // FormScreen'e de imageUris'i geçiyoruz
-            FormScreen(viewModel, navController, imageUris, imageUri)
+            FormScreen(viewModel, navController, imageUris)
 
         }
 
@@ -251,7 +243,7 @@ fun ImageDialog(uri: Uri, onDismiss: () -> Unit) {
 }
 
 @Composable
-fun FormScreen(viewModel: FormViewModel, navController: NavHostController, imageUris: List<Uri>, imageUri: ArrayList<String>) {
+fun FormScreen(viewModel: FormViewModel, navController: NavHostController, imageUris: List<Uri>) {
     var baslik by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var phoneNumber by remember { mutableStateOf(TextFieldValue("")) }
@@ -367,7 +359,7 @@ fun FormScreen(viewModel: FormViewModel, navController: NavHostController, image
                         noteTime.text,
                         additinalInformation.text,
                         isChecked,
-                        imageUri
+                        imageUris.map { it.toString() }
                     )
 
                     // Form alanlarını sıfırla
